@@ -116,6 +116,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .names .amp { display: block; font-family: var(--italic); font-style: italic; text-transform: none; color: var(--green); font-size: 1.5em; line-height: 1; margin: 2px 0; }
 .date { margin: 34px 0 0; display: flex; align-items: center; justify-content: center; gap: 18px; font-family: var(--display); font-size: 1.7rem; letter-spacing: .14em; color: var(--green); }
 .date::before, .date::after { content: ''; height: 1px; width: 56px; background: var(--gold); }
+.date-geez { margin: 6px 0 0; font-family: "Noto Serif Ethiopic", "Abyssinica SIL", serif; font-weight: 600; font-size: 1.4rem; letter-spacing: .12em; color: var(--gold-ink); }
 .countdown { margin: 8px 0 0; font-family: var(--italic); font-style: italic; color: var(--gold-ink); font-size: 1.15rem; }
 .niche { position: relative; width: min(400px, 100%); aspect-ratio: 5 / 7; margin: 0 auto; background: var(--green); border-radius: 999px 999px 0 0; box-shadow: 0 0 0 6px var(--paper), 0 0 0 7px var(--gold); overflow: hidden; animation: reveal 1.4s cubic-bezier(.2, .7, .2, 1) backwards .1s; }
 .niche::before { content: ''; position: absolute; inset: 14px; border: 1px solid rgba(239, 207, 134, .55); border-radius: 999px 999px 0 0; pointer-events: none; z-index: 3; }
@@ -360,6 +361,7 @@ figcaption { margin-top: 12px; font-family: var(--italic); font-style: italic; f
       <span class="sep" aria-hidden="true"></span>
       <p class="names"><small>Dn. Dr.</small>Binyam Belachew<span class="amp" aria-label="and">&amp;</span>Betelhem Gebresilasse</p>
       <p class="date">11.21.26</p>
+      <p class="date-geez" lang="am" aria-label="Ethiopian calendar date: Hidar 12, 2019">፲፪ / ፫ / ፳፻፲፱</p>
       <p class="countdown" aria-live="polite"></p>
     </div>
     <div class="niche cover-niche" aria-hidden="true">
