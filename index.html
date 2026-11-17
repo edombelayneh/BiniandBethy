@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bini and Bethy’s Pamphlet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Noto+Serif+Ethiopic:wght@400;600&display=swap">
+<style>
+/* Layout idea: the pamphlet's woven border becomes a fixed frame at the screen edge; inside it the panels read as a printed program, set in letterpress type with hairline rules instead of cards. */
+:root {
+  --f: 26px;
+  --paper: #efe2bd;
+  --paper-2: #e3d1a0;
+  --ink: #261c13;
+  --green: #1b4f3b;
+  --burgundy: #6f1d2a;
+  --gold: #b58b2c;
+  --gold-ink: #7a5a12;
+  --fg: var(--ink);
+  --head: var(--green);
+  --accent: var(--burgundy);
+  --rule: rgba(122, 90, 18, .45);
+  --gut: clamp(18px, 5vw, 60px);
+  --display: 'IM Fell English SC', 'Cormorant SC', Georgia, serif;
+  --italic: 'IM Fell English', 'Cormorant Garamond', Georgia, serif;
+  --body: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --ethiopic: 'Noto Serif Ethiopic', 'Abyssinica SIL', serif;
+  --band: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' fill='%23ecdfb8'/%3E%3Cpath d='M14 1 27 14 14 27 1 14Z' fill='%231f5a43'/%3E%3Cpath d='M14 7 21 14 14 21 7 14Z' fill='%23ecdfb8'/%3E%3Cpath d='M14 10.5 17.5 14 14 17.5 10.5 14Z' fill='%236f1d2a'/%3E%3Cpath d='M0 0H7L0 7ZM28 0H21L28 7ZM0 28H7L0 21ZM28 28H21L28 21Z' fill='%236f1d2a'/%3E%3C/svg%3E");
+  color-scheme: light;
+}
+@media (max-width: 640px) { :root { --f: 15px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; padding: var(--f);
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 1.15rem; line-height: 1.65;
+  overflow-x: clip; font-kerning: normal; hanging-punctuation: first;
+}
+body::before { content: ''; position: fixed; inset: 0; z-index: -1; background: var(--paper) url('img/parchment.jpg') center / cover no-repeat; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- the frame ---------- */
+.fr { position: fixed; z-index: 90; pointer-events: none; background: var(--band); background-size: var(--f) var(--f); }
+.fr.t { top: 0; left: 0; right: 0; height: var(--f); }
+.fr.b { bottom: 0; left: 0; right: 0; height: var(--f); }
+.fr.l { top: 0; bottom: 0; left: 0; width: var(--f); }
+.fr.r { top: 0; bottom: 0; right: 0; width: var(--f); }
+.fr-line { position: fixed; inset: var(--f); z-index: 89; pointer-events: none; border: 1px solid var(--gold); }
+.fr-c { position: fixed; z-index: 91; width: var(--f); height: var(--f); background: var(--burgundy) url('img/goldcross.webp') center / 52% no-repeat; pointer-events: none; }
+.fr-c.tl { top: 0; left: 0; } .fr-c.tr { top: 0; right: 0; } .fr-c.bl { bottom: 0; left: 0; } .fr-c.br { bottom: 0; right: 0; }
+
+/* ---------- nav ---------- */
+.nav { position: sticky; top: var(--f); z-index: 70; background: color-mix(in srgb, var(--paper) 94%, white); border-bottom: 1px solid var(--rule); }
+.nav-in { display: flex; align-items: baseline; gap: 28px; padding: 0 var(--gut); max-width: 1240px; margin: 0 auto; }
+.brand { font-family: var(--display); font-size: 1.15rem; color: var(--green); text-decoration: none; white-space: nowrap; padding: 12px 0; letter-spacing: .04em; }
+.nav-links { display: flex; gap: 6px 22px; overflow-x: auto; scrollbar-width: none; flex: 1; }
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a { font-variant-caps: all-small-caps; letter-spacing: .16em; font-size: 1.02rem; text-decoration: none; padding: 13px 0 11px; white-space: nowrap; border-bottom: 2px solid transparent; color: var(--ink); transition: color .25s, border-color .25s; }
+.nav-links a:hover { color: var(--burgundy); }
+.nav-links a.active { color: var(--burgundy); border-bottom-color: var(--burgundy); }
+.progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--gold); transition: width .12s linear; }
+
+/* ---------- sections ---------- */
+.sec { position: relative; padding: 92px var(--gut) 100px; }
+.sec > .wrap { max-width: 1080px; margin: 0 auto; }
+.sec.on-green { --fg: #f1e6c4; --head: #f6ecd0; --accent: #efcf86; --rule: rgba(239, 207, 134, .4); background: var(--green); color: var(--fg); }
+.sec.on-burgundy { --fg: #f3e5c4; --head: #f6ecd0; --accent: #efcf86; --rule: rgba(239, 207, 134, .4); background: var(--burgundy); color: var(--fg); }
+.sec.on-green::before, .sec.on-burgundy::before { content: ''; position: absolute; inset: 14px; border: 1px solid rgba(239, 207, 134, .35); pointer-events: none; }
+.sh { margin-bottom: 52px; max-width: 760px; }
+.kicker { margin: 0; font-variant-caps: all-small-caps; letter-spacing: .26em; font-size: 1.05rem; color: var(--gold-ink); display: flex; align-items: center; gap: 12px; }
+.kicker::before { content: ''; width: 30px; height: 1px; background: currentColor; }
+.on-green .kicker, .on-burgundy .kicker { color: var(--accent); }
+h2 { margin: 8px 0 0; font-family: var(--display); font-weight: 400; color: var(--head); font-size: clamp(2.1rem, 4.8vw, 3.4rem); line-height: 1.08; letter-spacing: .01em; text-wrap: balance; }
+.sh .rule { display: block; position: relative; height: 1px; margin-top: 26px; background: var(--rule); transform-origin: left; }
+.sh .rule::after { content: ''; position: absolute; left: 0; top: -4px; width: 9px; height: 9px; background: var(--gold); transform: rotate(45deg); }
+.cols { display: grid; gap: 52px 64px; align-items: start; }
+@media (min-width: 900px) {
+  .cols.a { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .cols.b { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .cols.c { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+  .stick { position: sticky; top: calc(var(--f) + 90px); }
+}
+p { margin: 0 0 1em; text-wrap: pretty; }
+.ref { font-variant-caps: all-small-caps; letter-spacing: .08em; font-size: 1.04em; font-weight: 600; color: var(--green); white-space: nowrap; }
+.on-green .ref, .on-burgundy .ref { color: var(--accent); }
+.q { font-family: var(--italic); font-style: italic; }
+
+/* ---------- reveal (below-the-fold items begin slightly pulled back, never hidden) ---------- */
+.rv { transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--d, 0s); }
+.rv.pending { opacity: .5; transform: translateY(14px); }
+.wipe { transition: clip-path 1.3s cubic-bezier(.2, .7, .2, 1), opacity .9s; clip-path: inset(0 0 0 0); }
+.wipe.pending { clip-path: inset(0 0 22% 0); opacity: .6; }
+.sh .rule { transition: transform 1.2s cubic-bezier(.2, .7, .2, 1); }
+.sh.pending .rule { transform: scaleX(.12); }
+
+/* ---------- cover ---------- */
+.cover { padding: 64px var(--gut) 84px; }
+.cover-in { max-width: 1120px; margin: 0 auto; display: grid; gap: 48px; align-items: center; }
+@media (min-width: 900px) { .cover-in { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
+.cover-text { text-align: center; }
+.cover-text > * { animation: rise .9s cubic-bezier(.2, .7, .2, 1) backwards; }
+.cover-text > :nth-child(2) { animation-delay: .1s; } .cover-text > :nth-child(3) { animation-delay: .2s; } .cover-text > :nth-child(4) { animation-delay: .3s; } .cover-text > :nth-child(5) { animation-delay: .4s; } .cover-text > :nth-child(6) { animation-delay: .5s; }
+.cover h1 { margin: 0; font-family: var(--display); font-weight: 400; color: var(--green); font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1.04; text-wrap: balance; }
+.joined { margin: 10px 0 0; font-family: var(--italic); font-style: italic; font-size: clamp(1.3rem, 2.6vw, 1.8rem); color: var(--burgundy); }
+.cover .sep { display: block; width: 120px; height: 1px; margin: 30px auto; background: var(--gold); position: relative; }
+.cover .sep::after { content: ''; position: absolute; left: 50%; top: -5px; width: 11px; height: 11px; margin-left: -5px; background: var(--paper); border: 1px solid var(--gold); transform: rotate(45deg); }
+.names { margin: 0; font-family: var(--display); color: var(--burgundy); font-size: clamp(1.5rem, 3.4vw, 2.3rem); line-height: 1.25; }
+.names small { display: block; font-size: .5em; letter-spacing: .2em; color: var(--gold-ink); }
+.names .amp { display: block; font-family: var(--italic); font-style: italic; text-transform: none; color: var(--green); font-size: 1.5em; line-height: 1; margin: 2px 0; }
+.date { margin: 34px 0 0; display: flex; align-items: center; justify-content: center; gap: 18px; font-family: var(--display); font-size: 1.7rem; letter-spacing: .14em; color: var(--green); }
+.date::before, .date::after { content: ''; height: 1px; width: 56px; background: var(--gold); }
+.countdown { margin: 8px 0 0; font-family: var(--italic); font-style: italic; color: var(--gold-ink); font-size: 1.15rem; }
+.niche { position: relative; width: min(400px, 100%); aspect-ratio: 5 / 7; margin: 0 auto; background: var(--green); border-radius: 999px 999px 0 0; box-shadow: 0 0 0 6px var(--paper), 0 0 0 7px var(--gold); overflow: hidden; animation: reveal 1.4s cubic-bezier(.2, .7, .2, 1) backwards .1s; }
+.niche::before { content: ''; position: absolute; inset: 14px; border: 1px solid rgba(239, 207, 134, .55); border-radius: 999px 999px 0 0; pointer-events: none; z-index: 3; }
+.niche .procross { position: absolute; top: 9%; left: 50%; width: 22%; transform: translateX(-50%); transform-origin: 50% 100%; animation: sway 7s ease-in-out infinite; }
+.niche .couple { position: absolute; bottom: 0; left: 50%; width: 84%; transform: translateX(-50%); animation: coupleIn 1.5s cubic-bezier(.2, .7, .2, 1) backwards .5s; }
+
+/* ---------- print-style images ---------- */
+.fig { margin: 0; }
+.print { background: #fbf4de; padding: 9px; border: 1px solid var(--rule); box-shadow: 0 22px 30px -26px rgba(40, 20, 0, .8); }
+.pic { overflow: hidden; background: var(--paper-2); }
+.pic img { width: 100%; height: 110%; object-fit: cover; will-change: transform; }
+.fig.arch .print { border-radius: 999px 999px 2px 2px; padding: 8px; }
+.fig.arch .pic { border-radius: 999px 999px 0 0; }
+figcaption { margin-top: 12px; font-family: var(--italic); font-style: italic; font-size: 1.02rem; color: var(--gold-ink); }
+.on-green figcaption, .on-burgundy figcaption { color: var(--accent); }
+.fig.arch figcaption { text-align: center; }
+
+/* ---------- welcome ---------- */
+.note { font-size: clamp(1.3rem, 2.3vw, 1.65rem); line-height: 1.6; }
+.note::first-letter { float: left; font-family: var(--display); font-size: 4.6em; line-height: .78; padding: .06em .1em 0 0; color: var(--burgundy); }
+.verse { margin: 34px 0 0; padding-left: 20px; border-left: 2px solid var(--gold); font-family: var(--italic); font-style: italic; font-size: 1.45rem; color: var(--burgundy); }
+.verse small { display: block; margin-top: 4px; font-family: var(--body); font-style: normal; font-variant-caps: all-small-caps; letter-spacing: .18em; font-size: 1rem; color: var(--gold-ink); }
+
+/* ---------- church terms ---------- */
+.lead { font-size: 1.35rem; line-height: 1.55; margin-bottom: 36px; }
+.terms { margin: 0; display: grid; gap: 0 36px; }
+@media (min-width: 640px) { .terms { grid-template-columns: 1fr 1fr; } }
+.term { padding: 18px 0 14px; border-top: 1px solid var(--rule); }
+.term dt { font-family: var(--display); font-size: 1.35rem; color: var(--burgundy); display: flex; flex-wrap: wrap; gap: 0 12px; align-items: baseline; }
+.term dt .am { font-family: var(--ethiopic); font-size: 1.05rem; color: var(--green); }
+.term dd { margin: 4px 0 0; font-size: 1.06rem; line-height: 1.58; }
+
+/* ---------- Q & A ---------- */
+.qa-bar { display: flex; justify-content: flex-end; margin-bottom: 4px; }
+.qa-all { background: none; border: 0; padding: 4px 0; cursor: pointer; font: inherit; font-variant-caps: all-small-caps; letter-spacing: .18em; font-size: 1rem; color: var(--gold-ink); text-decoration: underline; text-underline-offset: 4px; }
+.on-green .qa-all, .on-burgundy .qa-all { color: var(--accent); }
+.qa-all:hover { color: var(--burgundy); }
+.on-green .qa-all:hover { color: #fff; }
+.qa-item { border-top: 1px solid var(--rule); }
+.qa-item:last-child { border-bottom: 1px solid var(--rule); }
+.qa-item h3 { margin: 0; font-weight: 400; }
+.qa-q { width: 100%; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; background: none; border: 0; padding: 20px 0; text-align: left; cursor: pointer; color: inherit; font: inherit; }
+.qa-q .t { font-family: var(--italic); font-style: italic; font-size: 1.45rem; line-height: 1.3; color: var(--accent); }
+.qa-plus { flex: none; position: relative; width: 16px; height: 16px; margin-top: 8px; transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+.qa-plus::before, .qa-plus::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; margin-top: -.75px; background: var(--gold); }
+.qa-plus::after { transform: rotate(90deg); }
+.qa-item.open .qa-plus { transform: rotate(135deg); }
+.qa-a { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .55s cubic-bezier(.2, .7, .2, 1), visibility 0s .55s; }
+.qa-item.open .qa-a { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows .55s cubic-bezier(.2, .7, .2, 1), visibility 0s; }
+.qa-a > div { overflow: hidden; }
+.qa-a p { margin: 0 0 1em; max-width: 60ch; }
+
+/* ---------- rites ---------- */
+.rites { position: relative; max-width: 900px; padding-left: 44px; }
+.rail { position: absolute; left: 7px; top: 12px; bottom: 12px; width: 1px; background: var(--rule); }
+.rail i { position: absolute; left: -1px; top: 0; width: 3px; height: 0; background: var(--burgundy); transition: height .15s linear; }
+.rite { position: relative; display: grid; gap: 14px 44px; padding: 0 0 56px; align-items: center; }
+@media (min-width: 760px) { .rite { grid-template-columns: minmax(0, 1fr) 200px; } }
+.rite:last-child { padding-bottom: 0; }
+.rite::before { content: ''; position: absolute; left: -44px; top: 10px; width: 15px; height: 15px; background: var(--paper); border: 1px solid var(--gold); transform: rotate(45deg); transition: background .4s, border-color .4s; z-index: 2; }
+.rite.active::before { background: var(--burgundy); border-color: var(--burgundy); }
+.rite h3 { margin: 0 0 6px; font-family: var(--italic); font-style: italic; font-weight: 400; font-size: 1.9rem; line-height: 1.2; color: var(--burgundy); }
+.rite p { margin: 0; max-width: 56ch; }
+.rite-art { min-height: 140px; display: grid; place-items: center; }
+.rite-art > * { opacity: .55; transform: scale(.94); transition: opacity .8s, transform .8s cubic-bezier(.2, .7, .2, 1); }
+.rite.active .rite-art > * { opacity: 1; transform: none; }
+.rite-art img { max-height: 150px; width: auto; filter: drop-shadow(0 8px 8px rgba(40, 20, 0, .3)); }
+.rite.active .rings { animation: rings 1.3s cubic-bezier(.2, .7, .2, 1) backwards; }
+.seal { width: 110px; height: 110px; }
+.seal circle { fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-dasharray: 340; stroke-dashoffset: 340; transition: stroke-dashoffset 2.2s ease; }
+.rite.active .seal circle { stroke-dashoffset: 0; }
+.oil { width: 80px; height: 140px; }
+.oil .drop { animation: drip 4s cubic-bezier(.5, 0, .8, .6) infinite; transform-origin: 40px 20px; }
+.oil .ripple { fill: none; stroke: var(--gold); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; transform: scale(0); opacity: 0; animation: ripple 4s ease-out infinite; }
+.oil .ripple.two { animation-delay: .25s; }
+
+/* ---------- purposes ---------- */
+.purposes { list-style: none; margin: 0; padding: 0; }
+.purposes li { position: relative; padding: 22px 0 20px 40px; border-top: 1px solid var(--rule); }
+.purposes li:last-child { border-bottom: 1px solid var(--rule); }
+.purposes li::before { content: ''; position: absolute; left: 2px; top: 27px; width: 17px; height: 22px; background: url('img/goldcross.webp') center / contain no-repeat; }
+.purposes h3 { margin: 0 0 2px; font-family: var(--italic); font-style: italic; font-weight: 400; font-size: 1.55rem; line-height: 1.25; color: var(--burgundy); }
+.purposes p { margin: 0; }
+.pull { margin: 72px auto 0; max-width: 24ch; text-align: center; font-family: var(--italic); font-style: italic; font-size: clamp(1.7rem, 3.6vw, 2.6rem); line-height: 1.3; color: var(--green); text-wrap: balance; position: relative; padding-top: 38px; }
+.pull::before { content: ''; position: absolute; top: 0; left: 50%; width: 11px; height: 11px; margin-left: -5px; background: var(--gold); transform: rotate(45deg); }
+.pull small { display: block; margin-top: 12px; font-family: var(--body); font-style: normal; font-variant-caps: all-small-caps; letter-spacing: .2em; font-size: 1.05rem; color: var(--gold-ink); }
+.on-burgundy .pull { color: var(--head); } .on-burgundy .pull small { color: var(--accent); }
+.on-burgundy .pull::before { background: var(--accent); }
+
+/* ---------- instruments ---------- */
+.shelf { margin-top: 76px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
+@media (min-width: 900px) { .shelf { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.inst { padding: 28px 22px 26px; border-bottom: 1px solid var(--rule); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.inst:not(:nth-child(2n)) { border-right: 1px solid var(--rule); }
+@media (min-width: 900px) { .inst { border-right: 1px solid var(--rule); } .inst:nth-child(4n) { border-right: 0; } .inst:nth-child(2n) { border-right: 1px solid var(--rule); } .inst:nth-child(4n) { border-right: 0; } }
+.inst-btns { display: flex; gap: 10px; align-items: flex-end; justify-content: center; height: 138px; }
+.inst-btn { background: none; border: 0; padding: 4px; cursor: pointer; }
+.inst-btn img { height: 118px; width: auto; filter: drop-shadow(0 6px 6px rgba(40, 20, 0, .3)); transform-origin: 50% 80%; }
+.inst-btn.small img { height: 96px; }
+.inst h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 1.35rem; color: var(--green); line-height: 1.15; }
+.inst h3 em { display: block; font-family: var(--italic); font-size: 1.05rem; color: var(--burgundy); margin-top: 3px; }
+.inst p { margin: 0; font-size: 1.04rem; line-height: 1.55; }
+.hint { text-align: center; margin: 22px 0 0; font-family: var(--italic); font-style: italic; color: var(--gold-ink); }
+.hint a { font-family: var(--body); font-style: normal; font-variant-caps: all-small-caps; letter-spacing: .16em; font-size: 1.05rem; color: var(--green); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 5px; margin-left: 6px; white-space: nowrap; }
+.hint a:hover { color: var(--burgundy); }
+.play-sistrum img { animation: shake .7s ease-in-out; } .play-kebero img { animation: beat .9s ease-out; } .play-begena img { animation: pluck 1.1s ease-out; } .play-masinko img { animation: bow 1.2s ease-in-out; } .play-mekuamia img { animation: tap 1s ease-out; }
+.open-door { max-width: 720px; margin: 90px 0 0; padding-top: 34px; border-top: 1px solid var(--rule); }
+.open-door h3 { margin: 0 0 8px; font-family: var(--italic); font-style: italic; font-weight: 400; font-size: 2rem; color: var(--burgundy); }
+.open-door p { font-size: 1.25rem; margin: 0; }
+
+/* ---------- finale ---------- */
+.finale { text-align: center; }
+.finale .wrap { max-width: 980px; }
+.finale h2 { margin-top: 0; }
+.finale .procross-s { width: 70px; margin: 0 auto 22px; background: var(--paper); border-radius: 50%; padding: 12px 14px 10px; box-sizing: content-box; width: 46px; transform-origin: 50% 100%; animation: sway 7s ease-in-out infinite; }
+.virtues { margin-top: 46px; display: grid; grid-template-columns: 1fr minmax(0, 300px) 1fr; grid-template-areas: 'love love love' 'hum couple pray' 'pur couple uni'; gap: 26px 40px; align-items: center; }
+.virtue { font-family: var(--display); font-size: 1.55rem; color: var(--head); line-height: 1.15; padding-bottom: 14px; border-bottom: 1px solid var(--rule); transition: border-color .3s, color .3s; }
+.virtue span { display: block; margin-top: 4px; font-family: var(--italic); font-style: italic; font-size: 1.05rem; color: var(--accent); }
+.virtue:hover { border-bottom-color: var(--accent); color: #fff; }
+.virtue.love { grid-area: love; justify-self: center; min-width: min(100%, 340px); } .virtue.hum { grid-area: hum; text-align: right; } .virtue.pray { grid-area: pray; text-align: left; } .virtue.pur { grid-area: pur; text-align: right; } .virtue.uni { grid-area: uni; text-align: left; }
+.finale .niche { grid-area: couple; width: 100%; box-shadow: 0 0 0 6px var(--burgundy), 0 0 0 7px var(--accent); animation: none; }
+.finale .niche .couple { animation: none; }
+.foot { margin-top: 86px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.foot p { margin: 0; font-family: var(--display); font-size: 1.25rem; letter-spacing: .06em; color: var(--head); }
+.foot small { display: block; margin-top: 6px; font-variant-caps: all-small-caps; letter-spacing: .24em; font-size: 1.05rem; color: var(--accent); }
+
+/* ---------- keyframes ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes reveal { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes coupleIn { from { opacity: 0; transform: translate(-50%, 36px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes sway { 0%, 100% { transform: translateX(-50%) rotate(-1.6deg); } 50% { transform: translateX(-50%) rotate(1.6deg); } }
+.finale .procross-s { animation-name: sway2; }
+@keyframes sway2 { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+@keyframes rings { from { opacity: 0; transform: scale(.6) rotate(-18deg); } to { opacity: 1; transform: none; } }
+@keyframes drip { 0% { transform: translateY(-6px) scale(.2); opacity: 0; } 12% { transform: translateY(0) scale(1); opacity: 1; } 55% { transform: translateY(96px) scale(1); opacity: 1; } 62%, 100% { transform: translateY(104px) scale(.2); opacity: 0; } }
+@keyframes ripple { 0%, 54% { transform: scale(0); opacity: 0; } 58% { opacity: .9; } 100% { transform: scale(1); opacity: 0; } }
+@keyframes shake { 0%, 100% { transform: rotate(0); } 15% { transform: rotate(-16deg); } 30% { transform: rotate(14deg); } 45% { transform: rotate(-12deg); } 60% { transform: rotate(10deg); } 75% { transform: rotate(-6deg); } }
+@keyframes beat { 0% { transform: scale(1); } 12% { transform: scale(1.14); } 28% { transform: scale(.97); } 42% { transform: scale(1.1); } 70%, 100% { transform: scale(1); } }
+@keyframes pluck { 0%, 100% { transform: skewX(0); } 10% { transform: skewX(5deg) scaleY(1.02); } 25% { transform: skewX(-4deg); } 45% { transform: skewX(2.5deg); } 65% { transform: skewX(-1.5deg); } }
+@keyframes bow { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-9deg) translateX(-4px); } 60% { transform: rotate(8deg) translateX(4px); } }
+@keyframes tap { 0%, 100% { transform: translateY(0) rotate(0); } 20% { transform: translateY(-14px) rotate(-4deg); } 40% { transform: translateY(0); } 55% { transform: translateY(-7px) rotate(3deg); } 75% { transform: translateY(0); } }
+
+/* ---------- small screens ---------- */
+@media (max-width: 899px) {
+  .stick { position: static; }
+  .fig { max-width: 420px; }
+  .fig.arch { margin-inline: auto; width: 100%; }
+  .rites { padding-left: 34px; } .rite::before { left: -34px; }
+  .rite-art { justify-items: start; min-height: 0; }
+}
+@media (max-width: 640px) {
+  .sec { padding: 64px var(--gut) 72px; }
+  .nav-in { gap: 16px; } .brand { font-size: 1rem; }
+  .cover { padding-top: 44px; }
+  .date::before, .date::after { width: 28px; }
+  .virtues { grid-template-columns: 1fr 1fr; grid-template-areas: 'love love' 'couple couple' 'hum pray' 'pur uni'; gap: 22px 18px; }
+  .virtue.hum, .virtue.pur, .virtue.pray, .virtue.uni { text-align: center; font-size: 1.3rem; }
+  .finale .niche { width: min(300px, 100%); justify-self: center; }
+  .qa-q .t { font-size: 1.3rem; }
+  .sec.on-green::before, .sec.on-burgundy::before { inset: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  .rv.pending, .wipe.pending { opacity: 1; transform: none; clip-path: none; }
+  .niche .procross { transform: translateX(-50%); } .niche .couple { transform: translateX(-50%); }
+}
+
+@media (max-width: 640px) { .nav .brand { display: none; } .nav-links { padding-left: 4px; } }
+
+/* stickers */
+.fig { position: relative; }
+.sticker { position: absolute; pointer-events: none; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .3)); z-index: 2; height: auto; }
+.sticker.tr { top: -22px; right: -18px; } .sticker.tl { top: -22px; left: -18px; } .sticker.br { bottom: 44px; right: -16px; }
+.roundel { width: 62px; height: 62px; border-radius: 50%; border: 3px solid #fff; background: #fff url('img/roundel.webp') center / 100% no-repeat; box-shadow: 0 4px 10px rgba(0, 0, 0, .35); animation: bob 5s ease-in-out infinite; }
+.sway { animation: swing 5s ease-in-out infinite; transform-origin: 50% 90%; }
+.sticker-row { display: flex; gap: 18px; align-items: center; margin-top: 26px; }
+.sticker-row img { height: 64px; width: auto; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .3)); animation: bob 3.4s ease-in-out infinite; }
+.sticker-row img:nth-child(2) { animation-delay: -1.1s; } .sticker-row img:nth-child(3) { animation-delay: -2.2s; }
+.sticker-hint { margin: 10px 0 0; font-family: var(--italic); font-style: italic; font-size: .72em; color: var(--gold-ink); }
+@keyframes swing { 0%, 100% { transform: rotate(-2.2deg); } 50% { transform: rotate(2.2deg); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+@media (max-width: 640px) { .sticker.tr { right: -2px; } .sticker.tl { left: -2px; } .sticker.br { right: -2px; } }
+@media (prefers-reduced-motion: reduce) { .roundel, .sway { animation: none; } }
+
+/* interactive stickers */
+.sticker, .sticker-row img, .duo img, .oil-sticker { pointer-events: auto; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;
+  translate: var(--dx, 0px) var(--dy, 0px);
+  transition: scale .28s cubic-bezier(.34, 1.56, .64, 1), rotate .28s cubic-bezier(.34, 1.56, .64, 1), translate .6s cubic-bezier(.34, 1.7, .5, 1); }
+@media (hover: hover) { .sticker:hover, .sticker-row img:hover, .duo img:hover, .oil-sticker:hover { scale: 1.14; rotate: -6deg; } }
+.sticker.dragging, .sticker-row img.dragging, .duo img.dragging, .oil-sticker.dragging { cursor: grabbing; scale: 1.25; rotate: 5deg; z-index: 30; transition: scale .15s, rotate .15s, translate 0s; filter: drop-shadow(0 14px 12px rgba(0, 0, 0, .35)); animation-play-state: paused; }
+.fx { position: fixed; z-index: 9999; pointer-events: none; font-family: var(--body); line-height: 1; will-change: transform, opacity; }
+.toast { position: fixed; left: 50%; bottom: calc(var(--f) + 18px); translate: -50% 0; z-index: 9999; background: var(--burgundy); color: var(--paper); font-family: var(--italic); font-style: italic; padding: 10px 22px; border: 1px solid var(--gold); box-shadow: 0 10px 24px -8px rgba(0, 0, 0, .5); transition: opacity .5s, translate .5s; pointer-events: none; }
+.toast.out { opacity: 0; translate: -50% 12px; }
+
+.duo { position: relative; display: flex; align-items: center; justify-content: center; padding: 6px 0; }
+.rite-art .duo img { width: 150px; max-height: none; height: auto; filter: drop-shadow(0 6px 8px rgba(40, 20, 0, .4)); position: relative; }
+.duo .a { transform: rotate(-7deg); z-index: 1; }
+.duo .b { margin-left: -28px; margin-top: 16px; transform: rotate(6deg); }
+
+.rite-art .oil-sticker { height: 270px; width: auto; max-height: none; transform: rotate(4deg); filter: drop-shadow(0 8px 10px rgba(40, 20, 0, .4)); }
+
+/* cover art: cross above the couple, as on the printed cover */
+.cover { position: relative; }
+.cover .dust { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.cover-in { position: relative; z-index: 1; }
+.cover-art { position: relative; width: min(440px, 100%); aspect-ratio: 440 / 640; margin: 0 auto; }
+.cover-art .halo { position: absolute; left: 50%; bottom: 8%; width: 115%; aspect-ratio: 1; margin-left: -57.5%; background: radial-gradient(circle, rgba(212, 166, 70, .5), transparent 64%); animation: glowc 5s ease-in-out infinite; pointer-events: none; }
+.cover-art .procross { position: absolute; top: 0; left: 50%; width: 30%; margin-left: -15%; transform-origin: 50% 100%; animation: swayc 6s ease-in-out infinite; filter: drop-shadow(0 10px 12px rgba(30, 60, 40, .3)); }
+.cover-art .couple { position: absolute; bottom: 0; left: 50%; width: 66%; transform: translateX(-50%); transform-origin: 50% 100%; animation: risec 1.4s cubic-bezier(.2, .7, .2, 1) backwards .3s, breathec 7s ease-in-out 1.7s infinite; filter: drop-shadow(0 12px 14px rgba(60, 20, 10, .3)); }
+@keyframes swayc { 0%, 100% { transform: rotate(-2.2deg); } 50% { transform: rotate(2.2deg); } }
+@keyframes risec { from { opacity: 0; transform: translate(-50%, 60px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes breathec { 0%, 100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.015) translateY(-4px); } }
+@keyframes glowc { 0%, 100% { opacity: .55; transform: scale(.94); } 50% { opacity: 1; transform: scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { .cover-art .halo, .cover-art .procross, .cover-art .couple { animation: none; } .cover-art .couple { opacity: 1; } }
+
+/* framed hero: woven band + gold line around the cover, green niche with the cross */
+.cover { padding: 30px var(--gut) 60px; }
+.cover-box { max-width: 1200px; margin: 0 auto; padding: 22px; background: var(--band); background-size: 34px 34px; border-radius: 6px; box-shadow: 0 20px 40px -24px rgba(50, 30, 10, .7); }
+.cover-frame { position: relative; overflow: hidden; border: 3px solid var(--gold); background: #f3e8c6 url('img/parchment.jpg') center / cover; padding: 64px clamp(18px, 4vw, 56px) 56px; }
+.cover-niche { animation: reveal 1.4s cubic-bezier(.2, .7, .2, 1) backwards .1s; }
+.cover-niche .halo { position: absolute; left: 50%; bottom: 6%; width: 120%; aspect-ratio: 1; margin-left: -60%; background: radial-gradient(circle, rgba(239, 207, 134, .5), transparent 62%); animation: glowc 5s ease-in-out infinite; pointer-events: none; z-index: 0; }
+.cover-niche .pair { position: absolute; bottom: 0; left: 50%; width: 68%; transform: translateX(-50%); z-index: 1; animation: risec 1.4s cubic-bezier(.2, .7, .2, 1) backwards .4s, breathec 7s ease-in-out 1.8s infinite; transform-origin: 50% 100%; }
+.cover-niche .couple { position: relative; left: auto; bottom: auto; z-index: 1; display: block; width: 100%; height: auto; transform: none; animation: none; }
+.cover-niche .procross { position: absolute; z-index: 0; left: 50%; bottom: 86%; top: auto; width: 38%; margin-left: -19%; transform: none; transform-origin: 50% 100%; animation: swayc 6s ease-in-out infinite; filter: sepia(1) saturate(2.6) hue-rotate(-6deg) brightness(1.55) contrast(1.05) drop-shadow(0 0 9px rgba(239, 207, 134, .55)); }
+@media (max-width: 640px) { .cover { padding: 16px 12px 40px; } .cover-box { padding: 12px; } .cover-frame { border-width: 2px; padding: 44px 16px 40px; } }
+@media (prefers-reduced-motion: reduce) { .cover-niche .halo, .cover-niche .pair, .cover-niche .procross { animation: none; } }
+
+</style>
+</head>
+<body>
+<div class="fr t"></div><div class="fr b"></div><div class="fr l"></div><div class="fr r"></div><div class="fr-line"></div><div class="fr-c tl"></div><div class="fr-c tr"></div><div class="fr-c bl"></div><div class="fr-c br"></div>
+
+
+
+<header class="cover" id="top"><div class="cover-box"><div class="cover-frame">
+  <canvas class="dust" aria-hidden="true"></canvas>
+  <div class="cover-in">
+    <div class="cover-text">
+      <h1>By the Grace of God</h1>
+      <p class="joined">joined in Holy Matrimony</p>
+      <span class="sep" aria-hidden="true"></span>
+      <p class="names"><small>Dn. Dr.</small>Binyam Belachew<span class="amp" aria-label="and">&amp;</span>Betelhem Gebresilasse</p>
+      <p class="date">11.21.26</p>
+      <p class="countdown" aria-live="polite"></p>
+    </div>
+    <div class="niche cover-niche" aria-hidden="true">
+      <div class="halo"></div>
+      <div class="pair">
+        <img class="procross" src="img/procross.webp" alt="" width="386" height="510">
+        <img class="couple" src="img/couple.webp" alt="" width="512" height="768">
+      </div>
+    </div>
+  </div>
+</div></div></header>
+
+<section class="sec" id="church" aria-labelledby="h-church"><div class="wrap">
+  <header class="sh"><p class="kicker">The Church</p><h2 id="h-church">The Ethiopian Orthodox Tewahedo Church (EOTC)</h2><span class="rule" aria-hidden="true"></span></header>
+  <div class="cols a">
+    <div>
+      <p class="lead rv">The EOTC is one of the six Oriental Orthodox churches that remain today, founded by Our Lord and Savior Jesus Christ through the work of His apostles.</p>
+      <dl class="terms"><div class="term rv" style="--d:0.0s"><dt>Ethiopian</dt><dd>Refers to the unique traditions and heritage of Ethiopia as a Christian nation to worship God, before and after the existence of written laws (the Scripture), and to accept the promise of the New Covenant.</dd></div><div class="term rv" style="--d:0.1s"><dt>Orthodox</dt><dd>Means straight or true (<i>orthos</i>) faith (<i>doxa</i>). The name was adopted in 325 AD after the heresy of Arius, who taught that our Lord and Savior Jesus Christ was created by the Father before the universe.</dd></div><div class="term rv" style="--d:0.0s"><dt>Tewahedo</dt><dd>Means “made one.” It refers to the Incarnation of Christ, the complete union of His Divine and human nature into one.</dd></div><div class="term rv" style="--d:0.1s"><dt>Bete Christian<span class="am" lang="am">ቤተ ክርስቲያን</span></dt><dd>The Ethiopian word for Church. <i>Bete</i> means “house of,” so Bete Christian literally means the house or place of worship of Christians.</dd></div></dl>
+    </div>
+    <div><figure class="fig"><div class="print wipe"><div class="pic" style="aspect-ratio:660/466"><img src="img/lalibela.webp" alt="The rock-hewn cross-shaped church of Bete Giyorgis in Lalibela, seen from above" loading="lazy"></div></div><img class="sticker tr sway" src="img/handcross.webp" alt="" width="46"><figcaption>Bete Giyorgis · Lalibela</figcaption></figure></div>
+  </div>
+</div></section>
+<section class="sec" id="entering" aria-labelledby="h-entering"><div class="wrap">
+  <header class="sh"><p class="kicker">Entering</p><h2 id="h-entering">What to Expect in the Church</h2><span class="rule" aria-hidden="true"></span></header>
+  <div class="cols b">
+    <div class="stick"><figure class="fig"><div class="print wipe"><div class="pic" style="aspect-ratio:903/526"><img src="img/interior.webp" alt="Painted wall inside an Ethiopian church showing the Holy Trinity and the Crucifixion" loading="lazy"></div></div><img class="sticker tr sway" src="img/sistrum.webp" alt="" width="64"></figure></div>
+    <div><div class="qa" id="qa-enter"><div class="qa-bar"><button class="qa-all" type="button">Open all</button></div><div class="qa-item open"><h3><button class="qa-q" type="button" id="qa-enter-q0" aria-expanded="true" aria-controls="qa-enter-a0"><span class="t">Why do we remove our shoes before entering the sanctuary?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-enter-a0" role="region" aria-labelledby="qa-enter-q0"><div><p>Like the Prophet Moses, who was commanded to remove his shoes in the presence of God at the burning bush (<span class="ref">Exodus 3:5</span>), because, like the bush, the church is the dwelling place of God on Earth.</p></div></div></div><div class="qa-item"><h3><button class="qa-q" type="button" id="qa-enter-q1" aria-expanded="false" aria-controls="qa-enter-a1"><span class="t">Why are there so many images in the church?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-enter-a1" role="region" aria-labelledby="qa-enter-q1"><div><p>The images of the saints and angels remind us of the great cloud of witnesses who are alive in heaven and pray for us and protect us (<span class="ref">Hebrews 12:1</span>).</p></div></div></div><div class="qa-item"><h3><button class="qa-q" type="button" id="qa-enter-q2" aria-expanded="false" aria-controls="qa-enter-a2"><span class="t">Why do we wear white garments in church?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-enter-a2" role="region" aria-labelledby="qa-enter-q2"><div><p>As a reminder that we must come prepared before Christ to honor and respect the holiness of the church (<span class="ref">Matthew 22:11–13</span>), and because this is the apparel of the glorified body we will receive in heaven, as Christ revealed to us (<span class="ref">Mark 9:2–3</span>; <span class="ref">Revelation 6:11</span>).</p></div></div></div><div class="qa-item"><h3><button class="qa-q" type="button" id="qa-enter-q3" aria-expanded="false" aria-controls="qa-enter-a3"><span class="t">Why is Ge’ez used during the service?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-enter-a3" role="region" aria-labelledby="qa-enter-q3"><div><p>Ge’ez is the ancient liturgical language of the Ethiopian Orthodox Church. It continues to be used in worship and in the hymns of St. Yared.</p></div></div></div></div></div>
+  </div>
+</div></section>
+<section class="sec" id="matrimony" aria-labelledby="h-mat"><div class="wrap">
+  <header class="sh"><p class="kicker">The Sacrament</p><h2 id="h-mat">Holy Matrimony</h2><span class="rule" aria-hidden="true"></span></header>
+  <div class="cols a">
+    <div><div class="qa" id="qa-mat"><div class="qa-bar"><button class="qa-all" type="button">Open all</button></div><div class="qa-item open"><h3><button class="qa-q" type="button" id="qa-mat-q0" aria-expanded="true" aria-controls="qa-mat-a0"><span class="t">What is Holy Matrimony?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-mat-a0" role="region" aria-labelledby="qa-mat-q0"><div><p>Holy Matrimony is one of the Seven Sacraments of the Church. Through visible rites, a man and a woman receive invisible grace, uniting them so deeply that “the two shall become one flesh…no longer two, but one flesh” (<span class="ref">Matthew 19:5–6</span>).</p></div></div></div><div class="qa-item"><h3><button class="qa-q" type="button" id="qa-mat-q1" aria-expanded="false" aria-controls="qa-mat-a1"><span class="t">Who established marriage?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-mat-a1" role="region" aria-labelledby="qa-mat-q1"><div><p>Marriage was instituted by God from the very beginning, when He created humanity as male and female. Because God joins a husband and wife together, our Lord and Savior Jesus Christ reminds us: “What God has joined together, let not man separate” (<span class="ref">Matthew 19:4–6</span>).</p></div></div></div><div class="qa-item"><h3><button class="qa-q" type="button" id="qa-mat-q2" aria-expanded="false" aria-controls="qa-mat-a2"><span class="t">Why is marriage considered a “holy” union?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-mat-a2" role="region" aria-labelledby="qa-mat-q2"><div><p>It is holy because the love and self-sacrifice between a husband and a wife serve as a living reflection of Christ’s profound love for the Church (<span class="ref">Ephesians 5:24–29</span>). As the Apostle Paul writes, “Marriage is honorable among all” (<span class="ref">Hebrews 13:4</span>).</p></div></div></div></div></div>
+    <div class="stick"><figure class="fig arch"><div class="print wipe"><div class="pic" style="aspect-ratio:4/5"><img src="img/crowned.jpg" alt="The groom in a red crown and embroidered cape during the wedding service" loading="lazy"></div></div><img class="sticker tr sway" src="img/brosscross.webp" alt="" width="52"><figcaption>Crowned · Two become one</figcaption></figure></div>
+  </div>
+</div></section>
+<section class="sec on-green" id="communion" aria-labelledby="h-communion"><div class="wrap">
+  <header class="sh"><p class="kicker">The Mystery of</p><h2 id="h-communion">Holy Communion</h2><span class="rule" aria-hidden="true"></span></header>
+  <div class="cols b">
+    <div class="stick"><figure class="fig"><div class="print wipe"><div class="pic" style="aspect-ratio:576/497"><img src="img/supper.jpg" alt="A painted Last Supper with Christ and the apostles at table" loading="lazy"></div></div><div class="sticker tr roundel" aria-hidden="true"></div><figcaption>Within the house of God</figcaption></figure></div>
+    <div><div class="qa" id="qa-comm"><div class="qa-bar"><button class="qa-all" type="button">Open all</button></div><div class="qa-item open"><h3><button class="qa-q" type="button" id="qa-comm-q0" aria-expanded="true" aria-controls="qa-comm-a0"><span class="t">What is Holy Communion, and why does the couple receive it together?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-comm-a0" role="region" aria-labelledby="qa-comm-q0"><div><p>Holy Communion is truly the Body and Blood of our Lord and Savior Jesus Christ, given to us so that we may be united to Him in body, soul, and spirit (<span class="ref">John 6:53</span>; <span class="ref">John 15:4</span>). It is the fruit of the Holy Liturgy, a making present of the sacrifice of our Lord and Savior Jesus Christ by the Holy Spirit through the word of the priest.</p><p>Receiving Holy Communion together is the ultimate expression of the union of husband and wife in the Body of Christ.</p></div></div></div><div class="qa-item"><h3><button class="qa-q" type="button" id="qa-comm-q1" aria-expanded="false" aria-controls="qa-comm-a1"><span class="t">Why do Orthodox Christians prepare before receiving?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-comm-a1" role="region" aria-labelledby="qa-comm-q1"><div><p>Preparation includes prayer, repentance, confession, fasting, and reconciliation with others. These practices help believers approach Communion with reverence.</p></div></div></div><div class="qa-item"><h3><button class="qa-q" type="button" id="qa-comm-q2" aria-expanded="false" aria-controls="qa-comm-a2"><span class="t">Who may receive Holy Communion?</span><span class="qa-plus" aria-hidden="true"></span></button></h3><div class="qa-a" id="qa-comm-a2" role="region" aria-labelledby="qa-comm-q2"><div><p>Holy Communion is reserved for baptized and chrismated Orthodox Christians who have prepared themselves according to the teachings of the Church.</p></div></div></div></div></div>
+  </div>
+</div></section>
+<section class="sec" id="rites" aria-labelledby="h-rites"><div class="wrap">
+  <header class="sh"><p class="kicker">The Service</p><h2 id="h-rites">The Rites of the Wedding</h2><span class="rule" aria-hidden="true"></span></header>
+  <div class="rites"><div class="rail" aria-hidden="true"><i></i></div><article class="rite rv"><div><h3>The Rings</h3><p>The exchange of rings represents the endless, unbroken commitment between husband and wife. Blessed by the priest, the rings are a visible token of their lifelong pledge of love, fidelity, and unity under God’s grace.</p></div><div class="rite-art"><img class="rings" src="img/rings.webp" alt="Two gold wedding rings" width="281" height="144"></div></article><article class="rite rv"><div><h3>The Crowns &amp; Kaba</h3><p>The priest places crowns (<i>Akilil</i>) on the bridegroom and bride and clothes them in royal vestments (<i>Kaba</i>), crowning them king and queen of their new home and household. The crowns also honor their purity, commitment, and spiritual triumph in coming to Holy Matrimony.</p></div><div class="rite-art"><img src="img/crowns-couple.webp" alt="The couple from behind in red crowns and embroidered capes" width="318" height="331"></div></article><article class="rite rv"><div><h3>The Prayer of Teklil (Crowning)</h3><p>The central rite of the service, in which special prayers ask God to bless, sanctify, and unite the couple. Through these solemn prayers the Holy Spirit bestows the invisible grace that seals their bond as one flesh in the presence of the Church.</p></div><div class="rite-art"><div class="duo" ><img class="a" src="img/crown1.webp" alt="" width="520" height="385"><img class="b" src="img/crown2.webp" alt="" width="520" height="400"></div></div></article><article class="rite rv"><div><h3>Anointing with Holy Oil</h3><p>A sign of consecration, spiritual healing, and protection. As kings and prophets were anointed in Scripture, this anointing sets the couple apart for a holy purpose, blessing their minds, hearts, and union with the joy and strength of the Holy Spirit.</p></div><div class="rite-art"><svg class="oil" viewBox="0 0 80 140" aria-hidden="true"><ellipse cx="40" cy="122" rx="28" ry="6" fill="none" stroke="#b58b2c" stroke-width="1.5"/><ellipse class="ripple" cx="40" cy="120" rx="28" ry="6"/><ellipse class="ripple two" cx="40" cy="120" rx="28" ry="6"/><path class="drop" d="M40 6C40 6 28 23 28 31a12 12 0 0 0 24 0C52 23 40 6 40 6Z" fill="#b58b2c"/></svg></div></article></div>
+</div></section>
+<section class="sec" id="purposes" aria-labelledby="h-purposes"><div class="wrap">
+  <header class="sh"><p class="kicker">Its Purpose</p><h2 id="h-purposes">Why We Marry</h2><span class="rule" aria-hidden="true"></span></header>
+  <div class="cols c">
+    <div><figure class="fig arch"><div class="print wipe"><div class="pic" style="aspect-ratio:3/4"><img src="img/procession.jpg" alt="Worshippers in white gathered around the couple in red crowns during the service" loading="lazy"></div></div><div class="sticker tr roundel" aria-hidden="true"></div></figure></div>
+    <div>
+      <p class="lead rv" style="margin-bottom:22px">According to Orthodox teaching and Scripture, marriage serves these sacred purposes:</p>
+      <ul class="purposes"><li class="rv" style="--d:0.00s"><h3>To keep Christ at the center and inherit the Kingdom of God</h3><p>a joint spiritual journey where husband and wife help each other attain salvation, spiritual growth, and eternal life in Christ.</p></li><li class="rv" style="--d:0.08s"><h3>To bear and raise children</h3><p>“Be fruitful and multiply” (<span class="ref">Genesis 1:28</span>).</p></li><li class="rv" style="--d:0.16s"><h3>To provide mutual help and companionship</h3><p>husband and wife act as helpers and partners for one another (<span class="ref">Genesis 2:20–22</span>).</p></li><li class="rv" style="--d:0.24s"><h3>To guard against sexual immorality</h3><p>a sacred, committed bond of mutual affection and honor within which physical intimacy is blessed (<span class="ref">1 Corinthians 7:2–3</span>).</p></li></ul>
+    </div>
+  </div>
+  <p class="pull rv">“What God has joined together, let not man separate.”<small>Matthew 19:6</small></p>
+</div></section>
+<section class="sec" id="hymns" aria-labelledby="h-hymns"><div class="wrap">
+  <header class="sh"><p class="kicker">Sacred Hymns</p><h2 id="h-hymns">St. Yared &amp; The Instruments</h2><span class="rule" aria-hidden="true"></span></header>
+  <div class="cols c">
+    <div style="max-width:340px;width:100%"><figure class="fig arch"><div class="print wipe"><div class="pic" style="aspect-ratio:3/4"><img src="img/yared.jpg" alt="A painting of St. Yared and singers with sacred instruments" loading="lazy"></div></div></figure></div>
+    <p class="lead rv" style="margin:0">St. Yared was a sixth-century Ethiopian saint and hymn composer. He organized the sacred music of the Ethiopian Orthodox Church and composed hymns for different seasons, feasts, and commemorations. Orthodox tradition teaches that he was granted divine inspiration to develop these beautiful forms of worship, which continue to be used today.</p>
+  </div>
+  <div class="shelf"><article class="inst rv" style="--d:0.00s"><div class="inst-btns"><button type="button" class="inst-btn " data-inst="sistrum" aria-label="Animate the Tsenatsel, a sistrum"><img src="img/sistrum.webp" alt="Tsenatsel, a sistrum"></button></div><h3>Tsenatsel<em>sistrum</em></h3><p>The instrument with metal pieces that the choir shakes is one of the oldest used in worship, with roots in biblical times.</p></article><article class="inst rv" style="--d:0.07s"><div class="inst-btns"><button type="button" class="inst-btn " data-inst="kebero" aria-label="Animate the Kebero, a drum"><img src="img/kebero.webp" alt="Kebero, a drum"></button></div><h3>Kebero<em>drum</em></h3><p>The large drum that gives rhythm to sacred hymns. Its design reminds worshippers of the person and saving work of our Lord and Savior Jesus Christ.</p></article><article class="inst rv" style="--d:0.14s"><div class="inst-btns"><button type="button" class="inst-btn " data-inst="begena" aria-label="Animate the Begena, a harp"><img src="img/begena.webp" alt="Begena, a harp"></button><button type="button" class="inst-btn small" data-inst="masinko" aria-label="Animate the Masinko, a bowed string instrument"><img src="img/masinko.webp" alt="Masinko, a bowed string instrument"></button></div><h3>Begena &amp; Masinko<em>harp &amp; bowed string</em></h3><p>The Begena is associated with prayer and meditation; the Masinko accompanies hymns and spiritual songs.</p></article><article class="inst rv" style="--d:0.21s"><div class="inst-btns"><button type="button" class="inst-btn " data-inst="mekuamia" aria-label="Animate the Mekuamia, a prayer staff"><img src="img/mekuamia.webp" alt="Mekuamia, a prayer staff"></button></div><h3>Mekuamia<em>prayer staff</em></h3><p>A support during long services and a symbol of the Cross, its movements recall Christ’s journey to Golgotha.</p></article></div>
+  <p class="hint rv">Tap an instrument to see it move. Want to learn more about these instruments? <a href="https://youtu.be/cbc03fe5Njw" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></p>
+  <p class="verse rv" style="margin-top:56px;max-width:560px">“Taste and see that the Lord is good.”<small>Psalm 34:8</small></p>
+</div></section>
+<section class="sec" id="thanks" aria-labelledby="h-welcome"><div class="wrap">
+  <div class="cols b">
+    <div class="rv"><figure class="fig arch"><div class="print wipe"><div class="pic" style="aspect-ratio:3/4"><img src="img/arch-church.jpg" alt="Painted interior of an Ethiopian church, seen through an arched doorway" loading="lazy"></div></div><div class="sticker tl roundel" aria-hidden="true"></div><img class="sticker br sway" src="img/brosscross.webp" alt="" width="58"><figcaption>Enter with joy</figcaption></figure></div>
+    <div>
+      <header class="sh"><p class="kicker">We are grateful for your presence</p><h2 id="h-welcome">Thank You For Coming</h2><span class="rule" aria-hidden="true"></span></header>
+      <p class="note rv" style="font-family:var(--italic);font-style:italic">We are honored to have you join us today. Whether this service is familiar or entirely new to you, we hope that witnessing these ancient prayers, hymns, and traditions provides a glimpse into the rich spiritual heritage of the Ethiopian Orthodox Tewahedo Church and the sacred nature of Christian marriage.</p>
+      <div class="sticker-row rv"><img src="img/handcross.webp" alt="" height="64"><img src="img/kebero.webp" alt="" height="64"><img src="img/sistrum.webp" alt="" height="64"></div>
+      <p class="sticker-hint rv">Psst. Tap, drag, or toss the stickers around.</p>
+    </div>
+  </div>
+  <div class="open-door rv">
+    <h3>Is this church only for Ethiopians?</h3>
+    <p>The church is for all people! This pamphlet only scratches the surface of the depths of Christ’s Church. You are welcome and encouraged to come back, to learn, to visit, and to be fed in body and spirit.</p>
+  </div>
+</div></section>
+<section class="sec on-burgundy finale" id="rooted" aria-labelledby="h-rooted"><div class="wrap">
+  <img class="procross-s" src="img/procross.webp" alt="" width="70">
+  <h2 id="h-rooted">A Marriage Rooted in Christ</h2>
+  <div class="virtues"><div class="virtue love rv">Sacrificial Love<span>Ephesians 5:25</span></div><div class="virtue hum rv">Humility<span>Philippians 2:3–4</span></div><div class="virtue pray rv">Prayer<span>1 Thessalonians 5:17</span></div><div class="virtue pur rv">Purity<span>Hebrews 13:4</span></div><div class="virtue uni rv">Unity<span>Genesis 2:24</span></div><div class="niche" aria-hidden="true"><img class="couple" src="img/couple.webp" alt="" loading="lazy"></div></div>
+  <p class="pull rv">“Two are better than one, because they have a good reward for their toil”<small>Ecclesiastes 4:9</small></p>
+  <div class="foot rv"><p>Dn. Dr. Binyam Belachew &amp; Betelhem Gebresilasse</p><small>11.21.26</small></div>
+</div></section>
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ---- reveal: items below the fold start slightly pulled back, never hidden ---- */
+  var vh = window.innerHeight || 800;
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.remove('pending'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -5% 0px' });
+    $$('.rv, .wipe, .sh').forEach(function (el) {
+      if (el.getBoundingClientRect().top > vh * 0.92) { el.classList.add('pending'); io.observe(el); }
+    });
+  }
+
+  /* ---- nav ---- */
+  var links = $$('.nav-links a');
+  var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+  var nav = $('.nav');
+  function offset() {
+    var f = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--f')) || 26;
+    return f + (nav ? nav.offsetHeight : 48) + 8;
+  }
+  function goto(el) {
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - offset(), behavior: reduce ? 'auto' : 'smooth' });
+  }
+  links.forEach(function (a, i) {
+    a.addEventListener('click', function (ev) { ev.preventDefault(); if (sections[i]) goto(sections[i]); });
+  });
+  var brand = $('.brand');
+  if (brand) brand.addEventListener('click', function (ev) { ev.preventDefault(); window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+
+  var bar = $('.progress');
+  var rites = $$('.rite'), rail = $('.rail i'), ritesWrap = $('.rites');
+  var parallax = $$('.fig .pic img');
+  var lastCurrent = -2;
+
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    if (bar) bar.style.width = (max > 0 ? Math.min(100, (window.pageYOffset / max) * 100) : 0) + '%';
+
+    var mid = offset() + window.innerHeight * 0.25, current = -1;
+    sections.forEach(function (s, i) { if (s && s.getBoundingClientRect().top <= mid) current = i; });
+    links.forEach(function (a, i) {
+      var on = i === current;
+      a.classList.toggle('active', on);
+      if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+    if (current !== lastCurrent) {
+      lastCurrent = current;
+      if (current >= 0) {
+        var nl = $('.nav-links'), l = links[current];
+        nl.scrollTo({ left: l.offsetLeft - nl.clientWidth / 2 + l.clientWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    }
+
+    if (ritesWrap && rail) {
+      var r = ritesWrap.getBoundingClientRect(), line = window.innerHeight * 0.55;
+      rail.style.height = Math.max(0, Math.min(1, (line - r.top) / r.height)) * 100 + '%';
+      rites.forEach(function (el) { el.classList.toggle('active', el.getBoundingClientRect().top < line); });
+    }
+
+    if (!reduce) {
+      parallax.forEach(function (img) {
+        var box = img.parentElement.getBoundingClientRect();
+        if (box.bottom < -50 || box.top > window.innerHeight + 50) return;
+        var pr = (box.top + box.height / 2 - window.innerHeight / 2) / window.innerHeight;
+        img.style.transform = 'translateY(' + (-pr * 4 - 4).toFixed(2) + '%)';
+      });
+    }
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(function () { onScroll(); ticking = false; }); }
+  }, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---- accordions ---- */
+  $$('.qa').forEach(function (group) {
+    var items = $$('.qa-item', group), all = $('.qa-all', group);
+    function set(item, open) {
+      item.classList.toggle('open', open);
+      $('.qa-q', item).setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    function sync() {
+      all.textContent = items.every(function (i) { return i.classList.contains('open'); }) ? 'Close all' : 'Open all';
+    }
+    items.forEach(function (item) {
+      $('.qa-q', item).addEventListener('click', function () { set(item, !item.classList.contains('open')); sync(); });
+    });
+    all.addEventListener('click', function () {
+      var allOpen = items.every(function (i) { return i.classList.contains('open'); });
+      items.forEach(function (i) { set(i, !allOpen); });
+      sync();
+    });
+    sync();
+  });
+
+  /* ---- instruments (animation only) ---- */
+  $$('.inst-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var cls = 'play-' + btn.dataset.inst;
+      btn.classList.remove(cls); void btn.offsetWidth; btn.classList.add(cls);
+      setTimeout(function () { btn.classList.remove(cls); }, 1300);
+    });
+  });
+
+  /* ---- countdown ---- */
+  var cd = $('.countdown');
+  if (cd) {
+    var now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var days = Math.round((new Date(2026, 10, 21) - today) / 86400000);
+    if (days > 1) cd.textContent = days + ' days to go';
+    else if (days === 1) cd.textContent = 'Tomorrow';
+    else if (days === 0) cd.textContent = 'Today is the day';
+    else cd.hidden = true;
+  }
+})();
+
+
+/* ---- stickers: slap on, wiggle, drag and spring back, sparkles ---- */
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stickers = document.querySelectorAll('.sticker, .sticker-row img, .duo img, .oil-sticker');
+  var taps = 0, rained = false;
+  var glyphs = ['✦', '♥', '✦', '✧', '✝'];
+  var colors = ['#b58b2c', '#6f1d2a', '#d9a93a', '#1b4f3b'];
+
+  function burst(x, y, n) {
+    if (reduce) return;
+    for (var i = 0; i < n; i++) {
+      var s = document.createElement('span');
+      s.className = 'fx';
+      s.textContent = glyphs[i % glyphs.length];
+      s.style.left = x + 'px'; s.style.top = y + 'px';
+      s.style.color = colors[i % colors.length];
+      s.style.fontSize = (11 + Math.random() * 12) + 'px';
+      document.body.appendChild(s);
+      var ang = Math.random() * Math.PI * 2, dist = 36 + Math.random() * 56;
+      var dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 18;
+      s.animate([
+        { transform: 'translate(-50%,-50%) scale(.3) rotate(0deg)', opacity: 1 },
+        { transform: 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px)) scale(1) rotate(' + (Math.random() * 120 - 60) + 'deg)', opacity: 1, offset: .55 },
+        { transform: 'translate(calc(-50% + ' + dx * 1.15 + 'px), calc(-50% + ' + (dy + 34) + 'px)) scale(.6) rotate(' + (Math.random() * 200 - 100) + 'deg)', opacity: 0 }
+      ], { duration: 750 + Math.random() * 450, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = (function (el) { return function () { el.remove(); }; })(s);
+    }
+  }
+
+  function rain() {
+    if (reduce) return;
+    for (var i = 0; i < 46; i++) {
+      var s = document.createElement('span');
+      s.className = 'fx';
+      s.textContent = glyphs[i % glyphs.length];
+      s.style.left = (Math.random() * 100) + 'vw'; s.style.top = '-24px';
+      s.style.color = colors[i % colors.length];
+      s.style.fontSize = (12 + Math.random() * 14) + 'px';
+      document.body.appendChild(s);
+      s.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: 'translateY(' + (window.innerHeight + 40) + 'px) rotate(' + (Math.random() * 540 - 270) + 'deg)', opacity: 1 }
+      ], { duration: 1800 + Math.random() * 1600, delay: Math.random() * 700, easing: 'cubic-bezier(.3,.1,.6,1)', fill: 'backwards' }).onfinish = (function (el) { return function () { el.remove(); }; })(s);
+    }
+    var t = document.createElement('div');
+    t.className = 'toast'; t.textContent = 'Congratulations, Bini & Bethy!';
+    document.body.appendChild(t);
+    setTimeout(function () { t.classList.add('out'); }, 2800);
+    setTimeout(function () { t.remove(); }, 3400);
+  }
+
+  function react(el, x, y) {
+    if (!reduce) {
+      if (el.classList.contains('roundel')) {
+        el.animate([{ rotate: '0deg', scale: 1 }, { rotate: '200deg', scale: 1.3, offset: .5 }, { rotate: '360deg', scale: 1 }], { duration: 750, easing: 'cubic-bezier(.4,0,.2,1)' });
+      } else if (el.closest('.sticker-row')) {
+        el.animate([{ translate: '0 0', scale: '1 1' }, { translate: '0 -22px', scale: '.92 1.12', offset: .35 }, { translate: '0 0', scale: '1.15 .82', offset: .7 }, { translate: '0 0', scale: '1 1' }], { duration: 650, easing: 'ease-out' });
+      } else {
+        el.animate([{ rotate: '0deg' }, { rotate: '-22deg' }, { rotate: '18deg' }, { rotate: '-12deg' }, { rotate: '6deg' }, { rotate: '0deg' }], { duration: 650, easing: 'ease-in-out' });
+      }
+    }
+    burst(x, y, 9);
+    taps++;
+    if (taps >= 8 && !rained) { rained = true; rain(); }
+  }
+
+  stickers.forEach(function (el) {
+    var sx = 0, sy = 0, moved = false, down = false;
+    el.addEventListener('pointerdown', function (e) {
+      if (e.button > 0) return;
+      down = true; moved = false; sx = e.clientX; sy = e.clientY;
+      try { el.setPointerCapture(e.pointerId); } catch (_) {}
+      el.classList.add('dragging');
+      e.preventDefault();
+    });
+    el.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+      el.style.setProperty('--dx', dx + 'px'); el.style.setProperty('--dy', dy + 'px');
+    });
+    function up(e) {
+      if (!down) return;
+      down = false;
+      el.classList.remove('dragging');
+      el.style.setProperty('--dx', '0px'); el.style.setProperty('--dy', '0px');
+      var r = el.getBoundingClientRect();
+      if (moved) { burst(e.clientX, e.clientY, 5); if (!reduce) el.animate([{ scale: '1.2 .8' }, { scale: '.92 1.1', offset: .5 }, { scale: '1 1' }], { duration: 500, delay: 250 }); taps++; }
+      else react(el, r.left + r.width / 2, r.top + r.height / 2);
+    }
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+  });
+
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        var d = 350 + Math.random() * 250;
+        en.target.animate([
+          { scale: '0', rotate: '-50deg', opacity: 0 },
+          { scale: '1.3', rotate: '10deg', opacity: 1, offset: .6 },
+          { scale: '1', rotate: '0deg', opacity: 1 }
+        ], { duration: 700, delay: d, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' });
+      });
+    }, { threshold: .6 });
+    stickers.forEach(function (el) { io.observe(el); });
+  }
+})();
+
+/* gold dust drifting over the cover */
+(function () {
+  var cv = document.querySelector('.cover .dust');
+  if (!cv || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ctx = cv.getContext('2d'), W = 0, H = 0, dots = [], running = true;
+  function size() {
+    var r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function seed() {
+    dots = [];
+    for (var i = 0; i < 44; i++) dots.push({ x: Math.random() * W, y: Math.random() * H, r: .8 + Math.random() * 2, s: .15 + Math.random() * .4, p: Math.random() * 6.28, a: .25 + Math.random() * .5 });
+  }
+  size(); seed();
+  window.addEventListener('resize', function () { size(); seed(); });
+  function tick(t) {
+    if (!running) return;
+    ctx.clearRect(0, 0, W, H);
+    dots.forEach(function (d) {
+      d.y -= d.s; d.x += Math.sin(t / 1400 + d.p) * .25;
+      if (d.y < -6) { d.y = H + 6; d.x = Math.random() * W; }
+      var tw = .55 + .45 * Math.sin(t / 600 + d.p);
+      ctx.beginPath(); ctx.fillStyle = 'rgba(196,146,40,' + (d.a * tw).toFixed(3) + ')';
+      ctx.arc(d.x, d.y, d.r, 0, 6.2832); ctx.fill();
+    });
+    requestAnimationFrame(tick);
+  }
+  new IntersectionObserver(function (e) { var was = running; running = e[0].isIntersecting; if (running && !was) requestAnimationFrame(tick); }).observe(cv);
+  requestAnimationFrame(tick);
+})();
+
+</script>
+</body>
+</html>
